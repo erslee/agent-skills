@@ -1,0 +1,44 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "erslee-agent-skills",
+  "description": "Personal Claude Code plugins — engineering workflow skills and the agents they delegate to.",
+  "owner": {
+    "name": "erslee",
+    "email": "ersleeq@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "dev-pipeline",
+      "source": "./plugins/dev-pipeline",
+      "description": "End-to-end engineering pipeline skill (research → approved proposal → approved task plan → implement → verify → commit) plus the team git-flow commit skill and the five subagents the pipeline delegates to.",
+      "author": {
+        "name": "erslee"
+      },
+      "category": "workflow",
+      "keywords": [
+        "workflow",
+        "pipeline",
+        "git",
+        "commit",
+        "code-review",
+        "agents"
+      ]
+    },
+    {
+      "name": "english-hint",
+      "source": "./plugins/english-hint",
+      "description": "UserPromptSubmit hook that shows a short spelling and phrasing hint for the message you just sent. The hint is displayed to you only — it never enters Claude's context or affects the answer.",
+      "author": {
+        "name": "erslee"
+      },
+      "category": "productivity",
+      "keywords": [
+        "hook",
+        "writing",
+        "english",
+        "esl",
+        "prompt"
+      ]
+    }
+  ]
+}

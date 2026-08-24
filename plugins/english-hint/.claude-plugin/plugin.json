@@ -1,0 +1,14 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "english-hint",
+  "version": "1.0.0",
+  "description": "UserPromptSubmit hook that shows a short spelling and phrasing hint for the message you just sent. The hint is displayed to you only — it never enters Claude's context or affects the answer.",
+  "author": {
+    "name": "erslee",
+    "email": "ersleeq@gmail.com"
+  },
+  "homepage": "https://github.com/erslee/agent-skills",
+  "repository": "https://github.com/erslee/agent-skills",
+  "license": "MIT",
+  "keywords": ["hook", "writing", "english", "esl", "prompt"]
+}

@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/english-hint.sh",
+            "timeout": 20,
+            "statusMessage": "Checking English…"
+          }
+        ]
+      }
+    ]
+  }
+}

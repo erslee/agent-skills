@@ -1,0 +1,14 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "dev-pipeline",
+  "version": "1.0.0",
+  "description": "End-to-end engineering pipeline skill (research → approved proposal → approved task plan → implement → verify → commit) plus the team git-flow commit skill and the five subagents the pipeline delegates to.",
+  "author": {
+    "name": "erslee",
+    "email": "ersleeq@gmail.com"
+  },
+  "homepage": "https://github.com/erslee/agent-skills",
+  "repository": "https://github.com/erslee/agent-skills",
+  "license": "MIT",
+  "keywords": ["workflow", "pipeline", "git", "commit", "code-review", "agents"]
+}
