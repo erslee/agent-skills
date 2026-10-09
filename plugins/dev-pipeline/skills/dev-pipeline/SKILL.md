@@ -26,6 +26,20 @@ Also stop and confirm with the user before starting if:
 - there is no git repository here and none was offered to init, or
 - the request is ambiguous enough that research/decomposition would be guessing at requirements.
 
+## 0.5 Repo check — detect the design principles
+
+Before any research or design, learn how this repo wants code to be written. Every later stage (proposal, task plan, implementation, review) is measured against what you find here.
+
+Check, in this order, and stop once the picture is clear:
+
+1. **Written rules** — `CLAUDE.md` / `AGENTS.md` (root and nearest to the target files), `CONTRIBUTING*`, `README` architecture sections, `docs/adr/` or other decision records, style guides.
+2. **Enforced rules** — linter/formatter/typecheck configs (`eslint`, `ruff`, `golangci`, `tsconfig` strictness, import-boundary rules), test setup, CI checks.
+3. **Implicit rules** — read 2–3 existing modules closest to the change: layering (where transport, domain, data, UI live), dependency direction, error handling, naming, file/module size, how features are composed (DI, hooks, services, plain functions), how tests are structured.
+
+Write a short **Repo principles** note for yourself (5–10 bullets): the architecture style, the boundaries that must not be crossed, the patterns to copy, and the checks that must pass. Show it to the user as part of the proposal in step 1.5, and pass the relevant bullets into every `principal-developer` and `code-reviewer` prompt.
+
+Where the repo is silent, fall back to the baseline principles in step 3. Where the repo's own established pattern conflicts with the baseline, the repo wins — follow it and flag the tension rather than introducing a competing style.
+
 ## 1. Research
 
 Answer narrow questions yourself with Grep/Glob/Read — a few targeted searches are faster than briefing an agent. Spawn `Explore` (or `researcher` for "how does X work end to end") only when the question is genuinely broad — sweeping many files or subsystems whose contents you don't need verbatim afterwards. Independent broad questions can go to parallel agents in one turn.
@@ -47,6 +61,8 @@ Shape to aim for:
 
 ```
 Goal: <one sentence, in the user's terms>
+
+Repo principles: <the 3–5 bullets from step 0.5 that shape this change>
 
   <ascii sketch of the flow, marking the NEW / CHANGED parts>
 
@@ -91,9 +107,19 @@ Rules:
 
 Default: implement inline yourself, subtask by subtask, marking tasks complete as you go. You have the research context, you see the diffs, and the user sees your progress. Stay inside the file list approved in step 2.5.
 
-Spawn `principal-developer` workers only when step 2 produced two or more genuinely independent subtasks worth running in parallel — then spawn them concurrently in one turn, each with a self-contained prompt: what to build, the file paths it owns, acceptance criteria, and constraints from research. When workers return, reconcile any shared interfaces yourself (same signatures, same shapes) — don't assume agreement because both "finished".
+Spawn `principal-developer` workers only when step 2 produced two or more genuinely independent subtasks worth running in parallel — then spawn them concurrently in one turn, each with a self-contained prompt: what to build, the file paths it owns, acceptance criteria, constraints from research, and the relevant repo principles from step 0.5. When workers return, reconcile any shared interfaces yourself (same signatures, same shapes) — don't assume agreement because both "finished".
 
-Hold code you write inline to the same design standard as the `principal-developer` agent and the `code-reviewer`: **DRY** (one home per rule or literal — reuse before you add), **KISS** (simplest construct that solves it), **YAGNI** (nothing without a present caller), **SOLID** (one reason to change per unit, narrowest interface that works), **separation of concerns** (logic out of transport/UI, in testable units). Where a principle conflicts with the surrounding module's established pattern, follow the pattern and flag the tension — and don't trade KISS/YAGNI away to satisfy DRY.
+Always follow the repo principles from step 0.5 first. On top of them, hold every change — inline or delegated — to the same baseline as the `principal-developer` agent and the `code-reviewer`:
+
+- **DRY** — one home per rule or literal; reuse before you add.
+- **KISS** — the simplest construct that solves it.
+- **YAGNI** — nothing without a present caller.
+- **SOLID** — one reason to change per unit, narrowest interface that works.
+- **Separation of concerns** — logic out of transport/UI, in testable units.
+- **Low coupling** — units talk through small, explicit interfaces; no reaching into another module's internals, no hidden shared state, no new cross-layer or circular dependencies.
+- **High cohesion** — code that changes together lives together; each module does one coherent job, and new code goes where its closest relatives already live.
+
+Where a principle conflicts with the surrounding module's established pattern, follow the pattern and flag the tension — and don't trade KISS/YAGNI away to satisfy DRY.
 
 Write or update tests as part of each subtask where the change has verifiable runtime behavior — matching the project's existing framework and conventions. If the project has no test framework, don't introduce one unasked; verify via typecheck/lint/build instead.
 
@@ -121,7 +147,7 @@ Invoke the `commit` skill to branch/commit/push per the team git flow. Let that 
 
 After the commit is pushed, ask the user whether they want a code review of the change — don't run it unprompted.
 
-If they say yes, spawn the `code-reviewer` agent on the diff. A fresh agent is the right tool here: it hasn't seen your reasoning, so it reads the code as a stranger would. (Do not invoke `/code-review` via the `Skill` tool — that command is user-triggered only and will fail if called programmatically.)
+If they say yes, spawn the `code-reviewer` agent on the diff, passing it the repo principles from step 0.5. A fresh agent is the right tool here: it hasn't seen your reasoning, so it reads the code as a stranger would. (Do not invoke `/code-review` via the `Skill` tool — that command is user-triggered only and will fail if called programmatically.)
 
 If it reports findings, use judgment: clear-cut bugs go through the fix loop and land as a follow-up commit (via the `commit` skill again); stylistic/uncertain findings can be surfaced to the user instead of auto-applied.
 

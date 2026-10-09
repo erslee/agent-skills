@@ -6,7 +6,7 @@ An opinionated engineering workflow for Claude Code: two skills and the five sub
 
 **Skills**
 
-- **`dev-pipeline`** — the full pipeline for a non-trivial coding task: research → solution proposal (**approval gate**) → decomposition into tasks (**approval gate, task by task**) → implement → test & verify with a bounded fix-loop → commit → optional code review. It biases toward doing the work inline and spawns subagents only for parallelism, context isolation, or fresh eyes.
+- **`dev-pipeline`** — the full pipeline for a non-trivial coding task: repo check (detects the repo's design principles) → research → solution proposal (**approval gate**) → decomposition into tasks (**approval gate, task by task**) → implement → test & verify with a bounded fix-loop → commit → optional code review. It biases toward doing the work inline and spawns subagents only for parallelism, context isolation, or fresh eyes.
 - **`commit`** — the git flow: branch off `dev` as `feature/{task_name}-short-description`, commit as `[{task_name}] Short description`, push, then kick off a background review of the commit. Branch name and commit message both require explicit approval.
 
 **Agents** (`researcher`, `principal-developer`, `test-writer`, `code-reviewer`, `ui-tester`)

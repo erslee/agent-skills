@@ -22,6 +22,9 @@ Walk this list explicitly for the code under review. Report a violation like any
 - **YAGNI** — exported-but-unused symbols, parameters no caller passes, dead plumbing, config for a case that doesn't exist yet.
 - **SOLID** — a unit with several unrelated reasons to change; a switch or if-chain that must be edited for every new case; a consumer depending on a far wider interface than it uses; concrete dependencies wired in where the caller should inject them.
 - **Separation of concerns** — business rules embedded in UI, route, or transport code; logic that can't be tested without mounting a component or mocking the world; a layer reaching past its boundary.
+- **Low coupling** — a unit importing another's internals instead of its public interface; hidden shared mutable state; a new cross-layer or circular dependency; a change that forces edits in unrelated modules.
+- **High cohesion** — a module picking up a responsibility unrelated to its job; logic placed far from the code it changes with; a grab-bag `utils`/`helpers` growing another unrelated function.
+- **Repo principles** — anything that breaks the repo's own written or established rules (`CLAUDE.md`/`AGENTS.md`, `CONTRIBUTING`, ADRs, lint/import-boundary configs, the layering of neighbouring modules). Use the repo principles in your prompt if given; otherwise detect them before reviewing.
 
 Two limits on this: a pattern the surrounding codebase adopts deliberately and consistently is a convention, not a finding; and demanding an abstraction that has one caller is itself a KISS/YAGNI violation — don't trade one for the other.
 
